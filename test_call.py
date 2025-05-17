@@ -17,7 +17,14 @@ state = input("state: ")
 country = input("country: ")
 zipcode = input("zipcode: ")
 
+city = city.replace(" ", "+")
+state = state.replace(" ", "+")
+country = country.replace(" ", "+")
 
+print(city)
+print(state)
+print(country)
+print(zipcode)
 custom_query = f"city={city}&state={state}&country={country}&zipcode={zipcode}"
 
 query_string = weather_microservice_url + custom_query
@@ -25,4 +32,6 @@ query_string = weather_microservice_url + custom_query
 
 weather_results_by_city = call_weather_microservie(query_string)
 
-print(weather_results_by_city)
+
+pretty_json = json.dumps(weather_results_by_city, indent=4)
+print(pretty_json)

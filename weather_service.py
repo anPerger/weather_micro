@@ -45,6 +45,8 @@ weather_codes = {0: "Clear Sky",
 
 def call_geocoder(geocode_query):
     response = requests.get(geocode_query)
+    for resp in response:
+        print(resp)
     return response.json().get("results")
  
 def call_weather(weather_query):
@@ -60,21 +62,26 @@ def fetch_weather():
     zipcode = request.args.get("zipcode")
 
     
-    custom_query = f"components=locality:{city}|administrative_area:{state}|country:{country}|postal_code={zipcode}"
+    custom_query = f"components=locality:{city}|administrative_area:{state}|country:{country}|postal_code:{zipcode}"
   
     
     geocode_query = geocode_base_url + custom_query + "&key=" + geo_key
     # print(geocode_query)
 
-    response = call_geocoder(geocode_query)[0]
+    try:
+        response = call_geocoder(geocode_query)[0]
+    except IndexError:
+        return jsonify({"results": "No data found"})
+    
     address_components = response["geometry"]
     
-    lat = str(round(address_components["location"]["lat"], 2))
-    lng = str(round(address_components["location"]["lng"], 2))
+    lat = str(address_components["location"]["lat"])
+    lng = str(address_components["location"]["lng"])
 
 
     weather_query = weather_base_url + "latitude=" + lat + "&longitude=" + lng + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto"
     response, timezone = call_weather(weather_query)
+    
     forecast = {}
 
     for x in range(len(response["time"])):
@@ -94,7 +101,9 @@ def fetch_weather():
                          "days_away": x}
 
     results = {"timezone": timezone,
-               "forecast": forecast}
+               "forecast": forecast,
+               "params": {"city": city, "state": state, "country": country, "zipcode": zipcode},
+               "geocodes": {"lat": lat, "lng": lng}}
 
     return jsonify({"results": results})
 
