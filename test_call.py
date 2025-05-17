@@ -21,10 +21,10 @@ city = city.replace(" ", "+")
 state = state.replace(" ", "+")
 country = country.replace(" ", "+")
 
-print(city)
-print(state)
-print(country)
-print(zipcode)
+# print(city)
+# print(state)
+# print(country)
+# print(zipcode)
 custom_query = f"city={city}&state={state}&country={country}&zipcode={zipcode}"
 
 query_string = weather_microservice_url + custom_query

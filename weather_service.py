@@ -45,8 +45,6 @@ weather_codes = {0: "Clear Sky",
 
 def call_geocoder(geocode_query):
     response = requests.get(geocode_query)
-    for resp in response:
-        print(resp)
     return response.json().get("results")
  
 def call_weather(weather_query):
@@ -73,15 +71,18 @@ def fetch_weather():
     except IndexError:
         return jsonify({"results": "No data found"})
     
-    address_components = response["geometry"]
+    geometry = response["geometry"]
+    formatted_address = response["formatted_address"]
     
-    lat = str(address_components["location"]["lat"])
-    lng = str(address_components["location"]["lng"])
+    lat = str(geometry["location"]["lat"])
+    lng = str(geometry["location"]["lng"])
 
 
     weather_query = weather_base_url + "latitude=" + lat + "&longitude=" + lng + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto"
     response, timezone = call_weather(weather_query)
     
+
+
     forecast = {}
 
     for x in range(len(response["time"])):
@@ -103,7 +104,8 @@ def fetch_weather():
     results = {"timezone": timezone,
                "forecast": forecast,
                "params": {"city": city, "state": state, "country": country, "zipcode": zipcode},
-               "geocodes": {"lat": lat, "lng": lng}}
+               "city_found": {"formatted_address": formatted_address, "geocodes": {"lat": lat, "lng": lng}}
+               }
 
     return jsonify({"results": results})
 
