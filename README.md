@@ -26,6 +26,7 @@ to get data for Portland, Maine if you do not provide a state or zipcode to narr
 The data will be returned as JSON, so if you are looking to view the returned data in console for testing, it is reccomended you use JSON pretty 
 print for easier console viewing, like the example below
 
+
 `
 pretty_print = json.dumps(weather_results_by_city, indent=4)
 `
