@@ -45,6 +45,8 @@ weather_codes = {0: "Clear Sky",
 
 def call_geocoder(geocode_query):
     response = requests.get(geocode_query)
+    for resp in response:
+        print(resp)
     return response.json().get("results")
  
 def call_weather(weather_query):
