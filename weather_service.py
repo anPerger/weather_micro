@@ -1,9 +1,5 @@
  
 from flask import Flask, jsonify, request
-import random
-import numpy as np
-import scipy
-from scipy import stats
 import requests
 
 from key import geo_key
@@ -45,8 +41,6 @@ weather_codes = {0: "Clear Sky",
 
 def call_geocoder(geocode_query):
     response = requests.get(geocode_query)
-    for resp in response:
-        print(resp)
     return response.json().get("results")
  
 def call_weather(weather_query):
@@ -57,16 +51,22 @@ def call_weather(weather_query):
 def fetch_weather():
 
     city = request.args.get("city")
+    if not city:
+        city = ""
     state = request.args.get("state")
+    if not state:
+        state = ""
     country = request.args.get("country")
+    if not country:
+        country = ""
     zipcode = request.args.get("zipcode")
+    if not zipcode:
+        zipcode = ""
 
     
     custom_query = f"components=locality:{city}|administrative_area:{state}|country:{country}|postal_code:{zipcode}"
   
-    
     geocode_query = geocode_base_url + custom_query + "&key=" + geo_key
-    # print(geocode_query)
 
     try:
         response = call_geocoder(geocode_query)[0]
@@ -81,35 +81,37 @@ def fetch_weather():
 
 
     weather_query = weather_base_url + "latitude=" + lat + "&longitude=" + lng + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto"
-    response, timezone = call_weather(weather_query)
+        
+    try:
+        response, timezone = call_weather(weather_query)
+
+        forecast = {}
+        for x in range(len(response["time"])):
+            day = response["time"][x]
+            weather_code = response["weather_code"][x]
+            temp_min = response["temperature_2m_min"][x]
+            temp_max = response["temperature_2m_max"][x]
+            precip = response["precipitation_probability_max"][x]
+
+            weather_code = weather_codes[weather_code]
+
+
+            forecast[day] = {"weather_code": weather_code,
+                            "temp_min_c": temp_min,
+                            "temp_max_c": temp_max,
+                            "precipitation_%": precip,
+                            "days_away": x}
+
+        results = {"timezone": timezone,
+                "forecast": forecast,
+                "params": {"city": city, "state": state, "country": country, "zipcode": zipcode},
+                "city_found": {"formatted_address": formatted_address, "geocodes": {"lat": lat, "lng": lng}}
+                }
+
+        return jsonify({"results": results})
     
-
-
-    forecast = {}
-
-    for x in range(len(response["time"])):
-        day = response["time"][x]
-        weather_code = response["weather_code"][x]
-        temp_min = response["temperature_2m_min"][x]
-        temp_max = response["temperature_2m_max"][x]
-        precip = response["precipitation_probability_max"][x]
-
-        weather_code = weather_codes[weather_code]
-
-
-        forecast[day] = {"weather_code": weather_code,
-                         "temp_min_c": temp_min,
-                         "temp_max_c": temp_max,
-                         "precipitation_%": precip,
-                         "days_away": x}
-
-    results = {"timezone": timezone,
-               "forecast": forecast,
-               "params": {"city": city, "state": state, "country": country, "zipcode": zipcode},
-               "city_found": {"formatted_address": formatted_address, "geocodes": {"lat": lat, "lng": lng}}
-               }
-
-    return jsonify({"results": results})
+    except:
+        return jsonify({"results": "No data found"})
 
 if __name__ == "__main__":
     app.run(port=8001, debug=True)
