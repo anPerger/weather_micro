@@ -38,9 +38,9 @@ def call_weather_microservie(sim_request_string):
     response = requests.get(sim_request_string)  
     return response.json().get("results")  
 
-city = las+vegas  
-state = nv  
-country = united+states  
+city = "las+vegas"    
+state = "nv"    
+country = "united+states"    
 zipcode = ""  
 
 custom_query = f"city={city}&state={state}&country={country}&zipcode={zipcode}"  
@@ -51,8 +51,8 @@ weather_results_by_city = call_weather_microservie(query_string)
 The above code will return data for Las Vegas, Nevada. You could also remove the empty parameters from the query string and change the inputs to
 
 ```
-city = las+vegas  
-state = nevada  
+city = "las+vegas"    
+state = "nevada"    
 
 custom_query = f"city={city}&state={state}"  
 query_string = weather_microservice_url + custom_query  
