@@ -33,18 +33,20 @@ pretty_print = json.dumps(weather_results_by_city, indent=4)
 
 An example call can be made with a simple function which accepts your query string, such as
 
+```
+def call_weather_microservie(sim_request_string):  
+    response = requests.get(sim_request_string)  
+    return response.json().get("results")  
 
-`def call_weather_microservie(sim_request_string):`
+city = las+vegas  
+state = nv  
+country = united+states  
+zipcode = ""  
 
-    `response = requests.get(sim_request_string)`
-    `return response.json().get("results")`
-`city = las+vegas`
-`state = nv`
-`country = united+states`
-`zipcode = ""`
-`custom_query = f"city={city}&state={state}&country={country}&zipcode={zipcode}"`
-`query_string = weather_microservice_url + custom_query`
-`weather_results_by_city = call_weather_microservie(query_string)`
+custom_query = f"city={city}&state={state}&country={country}&zipcode={zipcode}"  
+query_string = weather_microservice_url + custom_query  
+weather_results_by_city = call_weather_microservie(query_string)  
+```
 
 The above code will return data for Las Vegas, Nevada. You could also remove the empty parameters from the query string and change the inputs to
 
