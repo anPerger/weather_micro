@@ -62,16 +62,6 @@ weather_results_by_city = call_weather_microservie(query_string)
 And it will still be able to infer Las Vegas, Nevada.
 
 
-## Mitigation Plan
-
-This microservice was created for Benjamin Joseph
-
-The current state is complete, unless code review requires any minor tweaks 
-
-This code can be accessed by git cloning this repository and running locally
-
-I have already shared the repo link over Teams and am in direct contact if any issues come up
-
 ## Additional consideration
 
 The only additional consideration is the Google API key, which can be set up [here](https://developers.google.com/maps/documentation/geolocation/cloud-setup)
