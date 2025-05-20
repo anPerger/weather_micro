@@ -50,14 +50,14 @@ weather_results_by_city = call_weather_microservie(query_string)
 
 The above code will return data for Las Vegas, Nevada. You could also remove the empty parameters from the query string and change the inputs to
 
-`
-city = las+vegas
-state = nevada
+```
+city = las+vegas  
+state = nevada  
 
-custom_query = f"city={city}&state={state}"
-query_string = weather_microservice_url + custom_query
+custom_query = f"city={city}&state={state}"  
+query_string = weather_microservice_url + custom_query  
 weather_results_by_city = call_weather_microservie(query_string)
-`
+```
 
 And it will still be able to infer Las Vegas, Nevada.
 
