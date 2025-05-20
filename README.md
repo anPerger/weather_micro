@@ -77,13 +77,13 @@ I have already shared the repo link over Teams and am in direct contact if any i
 The only additional consideration is the Google API key, which can be set up [here](https://developers.google.com/maps/documentation/geolocation/cloud-setup)
 
 Billing will need to be enabled for the API key to work, but the first 10k requests per month are free, and budgets can be set up so you are not 
-accidentally charged [info](https://cloud.google.com/billing/docs/how-to/budget-api)
+accidentally charged. [info here](https://cloud.google.com/billing/docs/how-to/budget-api)
 
 Once the API key has been created and billing enabled, you will need to create a "key.py" file in the main directory 
 
 ![alt text](key.png)
 
-They gitignore is already set to ignore any key.py file, so it is highly reccomended you use that file name to avoid accidentially pushing your 
+The gitignore is already set to ignore any key.py file, so it is highly reccomended you use that file name to avoid accidentially pushing your 
 API key to the repo.
 
 The needed libraries are shown below, along with the import of "geo_key" from key as shown above
